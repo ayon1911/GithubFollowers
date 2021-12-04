@@ -16,23 +16,18 @@ class MainTabBarController: UITabBarController {
     }
     
     private func setupTabBarController() {
-        viewControllers = [createSearchNC(), createFavouriteNC()]
+        viewControllers = [
+            createNavigationController(with: SearchVC(), title: "Search", tabBarItem: .search, tabBarItemTag: 0),
+            createNavigationController(with: FavouriteVC(), title: "Favourite", tabBarItem: .favorites, tabBarItemTag: 1)
+        ]
         UITabBar.appearance().tintColor = .systemGreen
     }
     
-    func createSearchNC() -> UINavigationController {
-        let searchVC = SearchVC()
-        searchVC.title = "Search"
-        searchVC.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 0)
-        return UINavigationController(rootViewController: searchVC)
+    func createNavigationController(with rootViewController: UIViewController, title: String, tabBarItem: UITabBarItem.SystemItem, tabBarItemTag: Int) -> UINavigationController {
+        rootViewController.title = title
+        rootViewController.tabBarItem = UITabBarItem(tabBarSystemItem: tabBarItem, tag: tabBarItemTag)
+        UINavigationBar.appearance().tintColor = .systemGreen
+        
+        return UINavigationController(rootViewController: rootViewController)
     }
-    
-    func createFavouriteNC() -> UINavigationController {
-        let favouriteVC = FavouriteVC()
-        favouriteVC.title = "Favourite VC"
-        favouriteVC.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 1)
-        return UINavigationController(rootViewController: favouriteVC)
-    }
-
-
 }
