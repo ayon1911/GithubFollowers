@@ -41,44 +41,34 @@ class SearchVC: UIViewController {
         logoImageView.translatesAutoresizingMaskIntoConstraints = false
         logoImageView.image = UIImage(named: "gh-logo")
         view.addSubview(logoImageView)
-        NSLayoutConstraint.activate([
-            logoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 80),
-            logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            logoImageView.widthAnchor.constraint(equalToConstant: 200),
-            logoImageView.heightAnchor.constraint(equalToConstant: 200)
-        ])
+        logoImageView.constrainWidth(constant: 200)
+        logoImageView.constrainHeight(constant: 200)
+        logoImageView.centerXInSuperview()
+        logoImageView.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: nil, bottom: nil, trailing: nil, padding: .init(top: 80, left: 0, bottom: 0, right: 0))
     }
     
     func configureTextField() {
         view.addSubview(usernameTextField)
         
         usernameTextField.delegate = self
-        usernameTextField.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            usernameTextField.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 48),
-            usernameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
-            usernameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50),
-            usernameTextField.heightAnchor.constraint(equalToConstant: 50)
-        ])
+        
+        usernameTextField.constrainHeight(constant: 50)
+        usernameTextField.anchor(top: logoImageView.bottomAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: 48, left: 50, bottom: 0, right: 50))
     }
     
     func configureButton() {
         view.addSubview(callToActionButton)
         callToActionButton.addTarget(self, action: #selector(handlePushFollwersListVC), for: .touchUpInside)
         
-        callToActionButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            callToActionButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
-            callToActionButton.heightAnchor.constraint(equalToConstant: 50),
-            callToActionButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
-            callToActionButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50)
-        ])
+        callToActionButton.constrainHeight(constant: 50)
+        callToActionButton.anchor(top: nil, leading: view.leadingAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, trailing: view.trailingAnchor, padding: .init(top: 0, left: 50, bottom: 50, right: 50))
     }
     
     //MARK: target actions
     @objc private func handlePushFollwersListVC() {
         guard isUsernameEntered else {
             print("No Username Entered")
+            presentCustomAlertVC(title: "Empty Username", message: "Please enter a username, we need to know who you are looking for 😎", buttonTitle: "choa Caho")
             return
         }
         let followersVC = FollowersListVC()
@@ -87,7 +77,6 @@ class SearchVC: UIViewController {
         
         navigationController?.pushViewController(followersVC, animated: true)
     }
-
 }
 
 extension SearchVC: UITextFieldDelegate {
