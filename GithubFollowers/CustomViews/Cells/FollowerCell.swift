@@ -12,7 +12,7 @@ class FollowerCell: UICollectionViewCell {
     static let reuseID = "FollowerCell"
     
     let avatarImageView = GFAvatarImageView(frame: .zero)
-    let usernameLable = GFTitleLabel(textAlignment: .center, fontSize: 16)
+    let usernameLabel = GFTitleLabel(textAlignment: .center, fontSize: 16)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -24,19 +24,18 @@ class FollowerCell: UICollectionViewCell {
     }
     
     func set(follower: Follower) {
-        usernameLable.text = follower.login
+        usernameLabel.text = follower.login
         
     }
     
     private func configure() {
         addSubview(avatarImageView)
-        addSubview(usernameLable)
+        addSubview(usernameLabel)
         
-        avatarImageView.anchor(top: contentView.topAnchor, leading: contentView.leadingAnchor, bottom: nil, trailing: contentView.trailingAnchor, padding: .init(top: 8, left: 8, bottom: 0, right: 8))
-//        avatarImageView.constrainHeight(constant: avatarImageView.frame.width)
+        avatarImageView.anchor(top: topAnchor, leading: leadingAnchor, bottom: nil, trailing: trailingAnchor, padding: .init(top: 8, left: 8, bottom: 0, right: 8))
         avatarImageView.heightAnchor.constraint(equalTo: avatarImageView.widthAnchor).isActive = true
         
-        usernameLable.anchor(top: avatarImageView.bottomAnchor, leading: contentView.leadingAnchor, bottom: nil, trailing: contentView.trailingAnchor, padding: .init(top: 12, left: 8, bottom: 0, right: 8))
-        usernameLable.constrainHeight(constant: 20)
+        usernameLabel.anchor(top: avatarImageView.bottomAnchor, leading: leadingAnchor, bottom: nil, trailing: trailingAnchor, padding: .init(top: 12, left: 8, bottom: 0, right: 8))
+        usernameLabel.constrainHeight(constant: 20)
     }
 }

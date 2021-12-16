@@ -22,6 +22,7 @@ class GFAvatarImageView: UIImageView {
     
     private func configure() {
         layer.cornerRadius = 10
+        contentMode = .scaleAspectFit
         clipsToBounds = true
         image = placeHolderImage
     }
