@@ -12,14 +12,14 @@ class FollowersListVC: UIViewController, UISearchControllerDelegate {
     enum Section { case main }
     
     var username: String!
-    var followers: [Follower] = []
-    var filteredFollowers = [Follower]()
-    var page = 1
-    var hasMoreFollowers: Bool = true
+    private var followers = [Follower]()
+    private var filteredFollowers = [Follower]()
+    private var page = 1
+    private var hasMoreFollowers: Bool = true
     
-    var collectionView: UICollectionView!
-    var dataSource: UICollectionViewDiffableDataSource<Section, Follower>!
-
+    private var collectionView: UICollectionView!
+    private var dataSource: UICollectionViewDiffableDataSource<Section, Follower>!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -96,6 +96,13 @@ class FollowersListVC: UIViewController, UISearchControllerDelegate {
         snapShot.appendSections([.main])
         snapShot.appendItems(followers)
         dataSource.apply(snapShot, animatingDifferences: true)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let selectedFollower = dataSource.itemIdentifier(for: indexPath) else { return }
+        let userInfoVC = UserInfoVC(user: selectedFollower)
+        let navigationVC = UINavigationController(rootViewController: userInfoVC)
+        present(navigationVC, animated: true)
     }
 }
 
