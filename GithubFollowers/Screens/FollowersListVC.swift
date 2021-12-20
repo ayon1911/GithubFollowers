@@ -42,6 +42,9 @@ class FollowersListVC: UIViewController, UISearchControllerDelegate {
     func configureViewController() {
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true
+        
+        let addBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped))
+        navigationItem.rightBarButtonItem = addBarButton
     }
     
     func configureSearchController() {
@@ -76,6 +79,10 @@ class FollowersListVC: UIViewController, UISearchControllerDelegate {
                 self.presentCustomAlertVC(title: "Bad stuff hapened", message: errorMessage.rawValue, buttonTitle: "ok")
             }
         }
+    }
+    
+    @objc private func addButtonTapped() {
+        
     }
     
     func configureCollectionView() {
