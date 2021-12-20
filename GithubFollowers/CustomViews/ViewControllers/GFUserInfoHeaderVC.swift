@@ -45,6 +45,7 @@ class UserInfoHeaderVC: UIViewController {
         namelabel.text = user.name ?? "No name"
         locationLabel.text = user.location ?? "No location"
         bioLabel.text = user.bio ?? "No Bio available"
+        bioLabel.numberOfLines = 2
         
         locationImageView.image = UIImage(systemName: SFSymbols.location)
         locationImageView.tintColor = .secondaryLabel
@@ -65,18 +66,20 @@ class UserInfoHeaderVC: UIViewController {
         userDetailsStackView.alignment = .leading
         userDetailsStackView.spacing = 6
         
-        let mainStackView = UIStackView(arrangedSubviews: [avatarImageView, userDetailsStackView])
-        mainStackView.axis = .horizontal
+        let avatarImageUserInfoStackView = UIStackView(arrangedSubviews: [avatarImageView, userDetailsStackView])
+        avatarImageUserInfoStackView.axis = .horizontal
+        avatarImageUserInfoStackView.distribution = .fill
+        avatarImageUserInfoStackView.alignment = .leading
+        avatarImageUserInfoStackView.spacing = 12
+        
+        let mainStackView = UIStackView(arrangedSubviews: [avatarImageUserInfoStackView, bioLabel])
+        mainStackView.axis = .vertical
         mainStackView.distribution = .fill
         mainStackView.alignment = .leading
         mainStackView.spacing = 12
         
         view.addSubview(mainStackView)
-        mainStackView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: padding, left: padding, bottom: padding, right: padding))
-        
-        view.addSubview(bioLabel)
-        bioLabel.anchor(top: mainStackView.bottomAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: padding, left: padding, bottom: padding, right: padding))
-        bioLabel.constrainHeight(constant: 80)
+        mainStackView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: padding, left: 0, bottom: padding, right: 0))
     }
 }
 

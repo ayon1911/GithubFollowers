@@ -96,7 +96,7 @@ extension UIView {
         }
     }
     
-    func centerYIn(view: UIView?, constant: CGFloat = 0) {
+    func centerYAnchorWith(view: UIView?, constant: CGFloat = 0) {
         translatesAutoresizingMaskIntoConstraints = false
         if let centerY = view?.centerYAnchor {
             centerYAnchor.constraint(equalTo: centerY, constant: constant).isActive = true
