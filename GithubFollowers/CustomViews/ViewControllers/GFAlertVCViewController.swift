@@ -22,6 +22,7 @@ class GFAlertVCViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.75)
+        actionButton.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
     }
     
     init(alertTitle: String, alertMessage: String, alertButtonTitle: String) {
@@ -35,6 +36,10 @@ class GFAlertVCViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc private func actionButtonTapped() {
+        dismiss(animated: true)
     }
     
     func configureView() {

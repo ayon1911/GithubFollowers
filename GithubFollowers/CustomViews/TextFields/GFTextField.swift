@@ -31,6 +31,7 @@ class GFTextField: UITextField {
         textAlignment = .center
         placeholder = "Enter Username"
         returnKeyType = .go
+        clearButtonMode = .whileEditing
         
         font = UIFont.preferredFont(forTextStyle: .title2)
         adjustsFontSizeToFitWidth = true

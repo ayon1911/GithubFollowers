@@ -18,7 +18,7 @@ class MainTabBarController: UITabBarController {
     private func setupTabBarController() {
         viewControllers = [
             createNavigationController(with: SearchVC(), title: "Search", tabBarItem: .search, tabBarItemTag: 0),
-            createNavigationController(with: FavouriteVC(), title: "Favourite", tabBarItem: .favorites, tabBarItemTag: 1)
+            createNavigationController(with: FavoritesListVC(), title: "Favourite", tabBarItem: .favorites, tabBarItemTag: 1)
         ]
         UITabBar.appearance().tintColor = .systemGreen
     }

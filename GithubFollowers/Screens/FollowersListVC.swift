@@ -24,6 +24,16 @@ class FollowersListVC: UIViewController, UISearchControllerDelegate {
     private var collectionView: UICollectionView!
     private var dataSource: UICollectionViewDiffableDataSource<Section, Follower>!
     
+    init(username: String) {
+        super.init(nibName: nil, bundle: nil)
+        self.username = username
+        title = username
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -82,7 +92,26 @@ class FollowersListVC: UIViewController, UISearchControllerDelegate {
     }
     
     @objc private func addButtonTapped() {
-        
+        showLoadingView()
+        NetworkManager.shared.getUserInfo(for: username) { [weak self] result in
+            guard let self = self else { return }
+            self.dismissLoadingView()
+            
+            switch result {
+            case .success(let user):
+                let favorite = Follower(login: user.login, avatarUrl: user.avatarUrl)
+                PersistanceManager.updateWith(favorite: favorite, actionType: .add) { [weak self] error in
+                    guard let self = self else { return }
+                    guard let error = error else {
+                        self.presentCustomAlertVC(title: "Success", message: "You have successfully added the user as you favorite 🤟🏽🤌🏾", buttonTitle: "Hooray 🎺")
+                        return
+                    }
+                    self.presentCustomAlertVC(title: "Someting went wrong", message: error.rawValue, buttonTitle: "OK")
+                }
+            case .failure(let error):
+                self.presentCustomAlertVC(title: "Someting went wrong", message: error.rawValue, buttonTitle: "OK")
+            }
+        }
     }
     
     func configureCollectionView() {
