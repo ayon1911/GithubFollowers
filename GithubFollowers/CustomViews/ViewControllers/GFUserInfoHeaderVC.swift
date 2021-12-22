@@ -40,7 +40,7 @@ class UserInfoHeaderVC: UIViewController {
     }
     
     func configureUIElements() {
-        avatarImageView.downloadImage(from: user.avatarUrl)
+        downloadAvatarImage()
         usernameLabel.text = user.login
         namelabel.text = user.name ?? "No name"
         locationLabel.text = user.location ?? "No location"
@@ -49,6 +49,14 @@ class UserInfoHeaderVC: UIViewController {
         
         locationImageView.image = UIImage(systemName: SFSymbols.location)
         locationImageView.tintColor = .secondaryLabel
+    }
+    
+    private func downloadAvatarImage() {
+        NetworkManager.shared.downloadImage(from: user.avatarUrl) { [weak self] image in
+            if let self = self {
+                DispatchQueue.main.async { self.avatarImageView.image = image }
+            }
+        }
     }
     
     func setupView() {

@@ -9,7 +9,7 @@ import UIKit
 
 class GFAlertVCViewController: UIViewController {
     
-    let containerView = UIView()
+    let containerView = GFAlertContainerView()
     let titleLabel = GFTitleLabel(textAlignment: .center, fontSize: 20)
     let messageLabel = GFBodyLabel(textAlignment: .center)
     let actionButton = GFButton(backgroundColor: .systemPink, title: "OK")
@@ -21,7 +21,7 @@ class GFAlertVCViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.75)
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.75)
         actionButton.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
     }
     
@@ -47,10 +47,6 @@ class GFAlertVCViewController: UIViewController {
         containerView.constrainWidth(constant: 280)
         containerView.constrainHeight(constant: 220)
         containerView.centerInSuperview()
-        containerView.backgroundColor = .systemBackground
-        containerView.layer.cornerRadius = 16
-        containerView.layer.borderWidth = 2
-        containerView.layer.borderColor = UIColor.white.cgColor
         
         let stackView = UIStackView(arrangedSubviews: [
             titleLabel, messageLabel, actionButton

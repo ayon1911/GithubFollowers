@@ -27,30 +27,30 @@ class GFAvatarImageView: UIImageView {
         image = placeHolderImage
     }
     
-    func downloadImage(from urlString: String) {
-        let cachedString = NSString(string: urlString)
-        if let cachedImage = NetworkManager.shared.cache.object(forKey: cachedString) {
-            self.image = cachedImage
-            return
-        }
-        
-        guard let url = URL(string: urlString) else { return }
-        let task = URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
-            
-            guard let self = self else { return }
-            
-            if error != nil { return }
-            
-            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else { return }
-            guard let data = data else { return }
-            
-            guard let image = UIImage(data: data) else { return }
-            NetworkManager.shared.cache.setObject(image, forKey: cachedString)
-            
-            DispatchQueue.main.async {
-                self.image = image
-            }
-        }
-        task.resume()
-    }
+//    func downloadImage(from urlString: String) {
+//        let cachedString = NSString(string: urlString)
+//        if let cachedImage = NetworkManager.shared.cache.object(forKey: cachedString) {
+//            self.image = cachedImage
+//            return
+//        }
+//        
+//        guard let url = URL(string: urlString) else { return }
+//        let task = URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+//            
+//            guard let self = self else { return }
+//            
+//            if error != nil { return }
+//            
+//            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else { return }
+//            guard let data = data else { return }
+//            
+//            guard let image = UIImage(data: data) else { return }
+//            NetworkManager.shared.cache.setObject(image, forKey: cachedString)
+//            
+//            DispatchQueue.main.async {
+//                self.image = image
+//            }
+//        }
+//        task.resume()
+//    }
 }

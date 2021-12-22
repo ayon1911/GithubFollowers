@@ -80,6 +80,7 @@ class NetworkManager {
             do {
                 let decoder = JSONDecoder()
                 decoder.keyDecodingStrategy = .convertFromSnakeCase
+                decoder.dateDecodingStrategy = .iso8601
                 let user = try decoder.decode(User.self, from: data)
                 completion(.success(user))
                 return
@@ -88,6 +89,35 @@ class NetworkManager {
                 return
             }
 
+        }
+        task.resume()
+    }
+    
+    func downloadImage(from urlString: String, completed: @escaping (UIImage?) -> ()) {
+        let cachedString = NSString(string: urlString)
+        if let cachedImage = NetworkManager.shared.cache.object(forKey: cachedString) {
+            completed(cachedImage)
+            return
+        }
+        
+        guard let url = URL(string: urlString) else {
+            completed(nil)
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            
+            guard error == nil,
+                  let response = response as? HTTPURLResponse, response.statusCode == 200,
+                  let data = data,
+                  let image = UIImage(data: data)
+            else {
+                completed(nil)
+                return
+            }
+            
+            NetworkManager.shared.cache.setObject(image, forKey: cachedString)
+            completed(image)
         }
         task.resume()
     }
