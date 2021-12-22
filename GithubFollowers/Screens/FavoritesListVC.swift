@@ -10,7 +10,7 @@ import UIKit
 class FavoritesListVC: GFDataLoadingVC {
     
     let tableView = UITableView()
-    var favorites = [Follower]()
+    var favourites = [Follower]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +33,7 @@ class FavoritesListVC: GFDataLoadingVC {
     private func configureTableView() {
         view.addSubview(tableView)
         tableView.frame = view.bounds
+        tableView.removeExcessCell()
         tableView.register(FavoriteListCell.self, forCellReuseIdentifier: FavoriteListCell.reuseID)
         tableView.delegate = self
         tableView.dataSource = self
@@ -40,16 +41,16 @@ class FavoritesListVC: GFDataLoadingVC {
     }
     
     private func getFavorite() {
-        PersistanceManager.retriveFavorites { [weak self] result in
+        PersistenceManager.retrieveFavorites { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case .success(let favorites):
-                if favorites.isEmpty {
+            case .success(let favourites):
+                if favourites.isEmpty {
                     DispatchQueue.main.async {
-                        self.showEmptyStateView(with: "You do not have any favorites at the moment 🙊", in: self.view)
+                        self.showEmptyStateView(with: "You do not have any favourites at the moment 🙊", in: self.view)
                     }
                 } else {
-                    self.favorites = favorites
+                    self.favourites = favourites
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                         self.view.bringSubviewToFront(self.tableView)
@@ -64,12 +65,12 @@ class FavoritesListVC: GFDataLoadingVC {
 
 extension FavoritesListVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        favorites.count
+        favourites.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: FavoriteListCell.reuseID, for: indexPath) as! FavoriteListCell
-        let favorite = favorites[indexPath.row]
+        let favorite = favourites[indexPath.row]
         cell.set(favorite: favorite)
         return cell
     }
@@ -79,22 +80,24 @@ extension FavoritesListVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let favorite = favorites[indexPath.row]
-        let destinationVC = FollowersListVC(username: favorite.login)
+        let favourite = favourites[indexPath.row]
+        let destinationVC = FollowersListVC(username: favourite.login)
         
         navigationController?.pushViewController(destinationVC, animated: true)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         guard editingStyle == .delete else { return }
-        let favorite = favorites[indexPath.row]
-        favorites.remove(at: indexPath.row)
-        tableView.deleteRows(at: [indexPath], with: .left)
         
-        PersistanceManager.updateWith(favorite: favorite, actionType: .remove) { [weak self] error in
+        PersistenceManager.updateWith(favourite: favourites[indexPath.row], actionType: .remove) { [weak self] error in
             guard let self = self else { return }
-            guard let error = error else { return }
-            self.presentCustomAlertVC(title: "Opps something did not work, could not delete", message: error.rawValue, buttonTitle: "Ok")
+            guard let error = error else {
+                
+                self.favourites.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .left)
+                return
+            }
+            self.presentCustomAlertVC(title: "Oops something did not work, could not delete", message: error.rawValue, buttonTitle: "Ok")
         }
     }
 }

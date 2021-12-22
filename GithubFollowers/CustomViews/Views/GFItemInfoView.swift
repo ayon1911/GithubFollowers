@@ -33,7 +33,7 @@ class GFItemInfoView: UIView {
     }
     
     private func configure() {
-        [symbolImageView, titleLabel, countlabel].forEach({ addSubview($0) })
+        addSubviews(symbolImageView, titleLabel, countlabel)
         
         symbolImageView.anchor(top: topAnchor, leading: leadingAnchor, bottom: nil, trailing: nil)
         symbolImageView.constrainWidth(constant: 20)
@@ -50,16 +50,16 @@ class GFItemInfoView: UIView {
     func set(itemInfoType: ItemInfoType, with count: Int) {
         switch itemInfoType {
         case .repos:
-            symbolImageView.image = UIImage(systemName: SFSymbols.repos)
+            symbolImageView.image = SFSymbols.repos
             titleLabel.text = "Public Repos"
         case .gist:
-            symbolImageView.image = UIImage(systemName: SFSymbols.gist)
+            symbolImageView.image = SFSymbols.gist
             titleLabel.text = "Public Gist"
         case .followers:
-            symbolImageView.image = UIImage(systemName: SFSymbols.followers)
+            symbolImageView.image = SFSymbols.followers
             titleLabel.text = "Followers"
         case .following:
-            symbolImageView.image = UIImage(systemName: SFSymbols.following)
+            symbolImageView.image = SFSymbols.following
             titleLabel.text = "Following"
         }
         countlabel.text = String(count)

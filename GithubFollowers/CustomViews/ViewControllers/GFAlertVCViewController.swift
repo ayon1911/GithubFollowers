@@ -17,6 +17,16 @@ class GFAlertVCViewController: UIViewController {
     var alertTitle: String?
     var alertMessage: String?
     var alertButtonTitle: String?
+    
+    lazy var stackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [
+            titleLabel, messageLabel, actionButton
+        ])
+        stackView.axis = .vertical
+        stackView.distribution = .fillProportionally
+        stackView.spacing = 10
+        return stackView
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +42,7 @@ class GFAlertVCViewController: UIViewController {
         self.alertButtonTitle = alertButtonTitle
     
         configureView()
+        setupViewProperties()
     }
     
     required init?(coder: NSCoder) {
@@ -43,25 +54,20 @@ class GFAlertVCViewController: UIViewController {
     }
     
     func configureView() {
-        view.addSubview(containerView)
+        view.addSubviews(containerView, stackView)
+        
         containerView.constrainWidth(constant: 280)
         containerView.constrainHeight(constant: 220)
         containerView.centerInSuperview()
         
-        let stackView = UIStackView(arrangedSubviews: [
-            titleLabel, messageLabel, actionButton
-        ])
-        stackView.axis = .vertical
-        stackView.distribution = .fillProportionally
-        stackView.spacing = 10
-        containerView.addSubview(stackView)
         stackView.anchor(top: containerView.topAnchor, leading: containerView.leadingAnchor, bottom: nil, trailing: containerView.trailingAnchor, padding: .init(top: 20, left: 20, bottom: 20, right: 20))
         stackView.centerXInSuperview()
         actionButton.constrainHeight(constant: 40)
-        
+    }
+    
+    private func setupViewProperties() {
         titleLabel.text = self.alertTitle
         messageLabel.text = self.alertMessage
         actionButton.setTitle(alertButtonTitle, for: .normal)
-        
     }
 }

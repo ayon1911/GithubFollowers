@@ -7,6 +7,11 @@
 
 import UIKit
 
+protocol ItemInfoVCDelegate: AnyObject {
+    func didTapGithubProfile(for user: User)
+    func didTapGetFollowers(for user: User)
+}
+
 class GFItemInfoVC: UIViewController {
     
     let stackView = UIStackView()
@@ -14,7 +19,7 @@ class GFItemInfoVC: UIViewController {
     let itemInfoViewTwo = GFItemInfoView()
     let actionButton = GFButton()
     var user: User!
-    weak var delegate: UserInfoVcDelegate!
+    weak var delegate: ItemInfoVCDelegate!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +30,7 @@ class GFItemInfoVC: UIViewController {
         configureActionButton()
     }
     
-    init(user: User, delegate: UserInfoVcDelegate) {
+    init(user: User, delegate: ItemInfoVCDelegate) {
         super.init(nibName: nil, bundle: nil)
         self.user = user
         self.delegate = delegate
@@ -54,8 +59,7 @@ class GFItemInfoVC: UIViewController {
     @objc func actionButtonTapped() { }
     
     private func laoutUI() {
-        view.addSubview(stackView)
-        view.addSubview(actionButton)
+        view.addSubviews(stackView, actionButton)
         
         let padding: CGFloat = 20
         

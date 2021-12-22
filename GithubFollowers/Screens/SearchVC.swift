@@ -40,6 +40,7 @@ class SearchVC: UIViewController {
     
     //MARK: viewLayout Configurations
     func configureImageView() {
+        view.addSubviews(logoImageView, usernameTextField, callToActionButton)
         logoImageView.translatesAutoresizingMaskIntoConstraints = false
         logoImageView.image = Images.ghLogo
         view.addSubview(logoImageView)
@@ -51,8 +52,6 @@ class SearchVC: UIViewController {
     }
     
     func configureTextField() {
-        view.addSubview(usernameTextField)
-        
         usernameTextField.delegate = self
         
         usernameTextField.constrainHeight(constant: 50)
@@ -60,7 +59,6 @@ class SearchVC: UIViewController {
     }
     
     func configureButton() {
-        view.addSubview(callToActionButton)
         callToActionButton.addTarget(self, action: #selector(handlePushFollwersListVC), for: .touchUpInside)
         
         callToActionButton.constrainHeight(constant: 50)

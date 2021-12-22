@@ -7,11 +7,11 @@
 
 import UIKit
 
-enum PersistanceActionType {
+enum PersistenceActionType {
     case add, remove
 }
 
-enum PersistanceManager {
+enum PersistenceManager {
     
     enum Keys {
         static let favorites = "favorites"
@@ -19,46 +19,45 @@ enum PersistanceManager {
     
     static private let defaults = UserDefaults.standard
     
-    static func updateWith(favorite: Follower, actionType: PersistanceActionType, completed: @escaping (GFError?) -> Void) {
-        retriveFavorites { result in
+    static func updateWith(favourite: Follower, actionType: PersistenceActionType, completed: @escaping (GFError?) -> Void) {
+        retrieveFavorites { result in
             switch result {
-            case .success(let favorites):
-                var retrivedFavorites = favorites
+            case .success(var favourites):
                 switch actionType {
                 case .add:
-                    guard !retrivedFavorites.contains(favorite) else {
+                    guard !favourites.contains(favourite) else {
                         completed(.alreadyInFavorite)
                         return
                     }
-                    retrivedFavorites.append(favorite)
+                    favourites.append(favourite)
                 case .remove:
-                    retrivedFavorites.removeAll(where: { $0.login == favorite.login })
+                    favourites.removeAll(where: { $0.login == favourite.login })
                 }
-                completed(saveFavorites(favorites: retrivedFavorites))
+                completed(saveFavorites(favourites: favourites))
             case .failure(let error):
                 completed(error)
             }
         }
     }
     
-    static func retriveFavorites(completed: @escaping (Result<[Follower], GFError>) -> Void) {
+    static func retrieveFavorites(completed: @escaping (Result<[Follower], GFError>) -> Void) {
         guard let favoritesData = defaults.object(forKey: Keys.favorites) as? Data else {
             completed(.success([]))
             return
         }
         do {
             let decoder = JSONDecoder()
-            let favorites = try decoder.decode([Follower].self, from: favoritesData)
-            completed(.success(favorites))
+            let favourites = try decoder.decode([Follower].self, from: favoritesData)
+            completed(.success(favourites))
         } catch {
             completed(.failure(.unableToSaveToFavorite))
         }
     }
     
-    static func saveFavorites(favorites: [Follower]) -> GFError? {
+    static func saveFavorites(favourites: [Follower]) -> GFError? {
         do {
             let encoder = JSONEncoder()
-            let encodedFavorites = try encoder.encode(favorites)
+            let encodedFavorites = try encoder.encode(favourites)
             defaults.set(encodedFavorites, forKey: Keys.favorites)
             return nil
         } catch {

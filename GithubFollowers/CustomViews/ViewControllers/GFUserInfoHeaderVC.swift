@@ -45,9 +45,8 @@ class UserInfoHeaderVC: UIViewController {
         namelabel.text = user.name ?? "No name"
         locationLabel.text = user.location ?? "No location"
         bioLabel.text = user.bio ?? "No Bio available"
-        bioLabel.numberOfLines = 2
-        
-        locationImageView.image = UIImage(systemName: SFSymbols.location)
+        bioLabel.constrainHeight(constant: 90)
+        locationImageView.image = SFSymbols.location
         locationImageView.tintColor = .secondaryLabel
     }
     

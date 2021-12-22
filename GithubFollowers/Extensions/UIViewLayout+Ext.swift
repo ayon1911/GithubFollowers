@@ -8,6 +8,10 @@
 import UIKit
 
 extension UIView {
+    //variadic parameters allows us to add as many number of views into an array
+    func addSubviews(_ views: UIView...) {
+        views.forEach({ addSubview($0) })
+    }
     
     @discardableResult
     func anchor(top: NSLayoutYAxisAnchor? = nil, leading: NSLayoutXAxisAnchor? = nil, bottom: NSLayoutYAxisAnchor? = nil, trailing: NSLayoutXAxisAnchor? = nil, padding: UIEdgeInsets = .zero, size: CGSize = .zero) -> AnchoredConstraints {
