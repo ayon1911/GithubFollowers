@@ -15,6 +15,9 @@ class UserInfoVC: UIViewController {
     
     private var user: Follower
     
+    let scrollView = UIScrollView()
+    let contentView = UIView()
+    
     let headerView = UIView()
     let itemViewOne = UIView()
     let itemViewTwo = UIView()
@@ -26,9 +29,9 @@ class UserInfoVC: UIViewController {
         super.viewDidLoad()
         
         configureViewController()
-        
+        configureScrollView()
         layoutUI()
-        
+
         getUserInfo()
     }
     
@@ -53,6 +56,17 @@ class UserInfoVC: UIViewController {
         navigationItem.rightBarButtonItem = doneButton
     }
     
+    private func configureScrollView() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        
+        scrollView.fillSuperview()
+        contentView.fillSuperview()
+        contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
+        contentView.constrainHeight(constant: 600)
+    }
+    
     fileprivate func getUserInfo() {
         NetworkManager.shared.getUserInfo(for: user.login) { [weak self] result in
             guard let self = self else { return }
@@ -75,17 +89,17 @@ class UserInfoVC: UIViewController {
     }
     
     func layoutUI() {
-        view.addSubviews(headerView, itemViewOne, itemViewTwo, dateLabel)
+        contentView.addSubviews(headerView, itemViewOne, itemViewTwo, dateLabel)
         let padding: CGFloat = 20
         let itemHeight: CGFloat = 140
         
-        headerView.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: 0, left: padding, bottom: 0, right: padding))
+        headerView.anchor(top: contentView.topAnchor, leading: contentView.leadingAnchor, bottom: nil, trailing: contentView.trailingAnchor, padding: .init(top: 0, left: padding, bottom: 0, right: padding))
         headerView.constrainHeight(constant: 210)
         
-        itemViewOne.anchor(top: headerView.bottomAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: padding, left: padding, bottom: 0, right: padding))
+        itemViewOne.anchor(top: headerView.bottomAnchor, leading: contentView.leadingAnchor, bottom: nil, trailing: contentView.trailingAnchor, padding: .init(top: padding, left: padding, bottom: 0, right: padding))
         itemViewOne.constrainHeight(constant: itemHeight)
         
-        itemViewTwo.anchor(top: itemViewOne.bottomAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: padding, left: padding, bottom: 0, right: padding))
+        itemViewTwo.anchor(top: itemViewOne.bottomAnchor, leading: contentView.leadingAnchor, bottom: nil, trailing: contentView.trailingAnchor, padding: .init(top: padding, left: padding, bottom: 0, right: padding))
         itemViewTwo.constrainHeight(constant: itemHeight)
         
         dateLabel.anchor(top: itemViewTwo.bottomAnchor, leading: nil, bottom: nil, trailing: nil, padding: .init(top: padding, left: 0, bottom: 0, right: 0))
