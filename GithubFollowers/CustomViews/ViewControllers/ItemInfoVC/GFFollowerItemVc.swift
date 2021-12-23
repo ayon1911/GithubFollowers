@@ -13,13 +13,12 @@ class GFFollowerItemVc: GFItemInfoVC {
         super.viewDidLoad()
 
         configureItems()
-        
     }
     
     private func configureItems() {
         itemInfoViewOne.set(itemInfoType: .followers, with: user.followers)
         itemInfoViewTwo.set(itemInfoType: .following, with: user.following)
-        actionButton.set(backgroundColor: .systemGreen, title: "Get Followers")
+        actionButton.set(colour: .systemGreen, title: "Get Followers", systemImageName: "person.3.fill")
     }
     
     override func actionButtonTapped() {

@@ -26,7 +26,7 @@ class GFItemInfoVC: UIViewController {
 
         configureBackgroudView()
         configureStackView()
-        laoutUI()
+        layoutUI()
         configureActionButton()
     }
     
@@ -58,7 +58,7 @@ class GFItemInfoVC: UIViewController {
     
     @objc func actionButtonTapped() { }
     
-    private func laoutUI() {
+    private func layoutUI() {
         view.addSubviews(stackView, actionButton)
         
         let padding: CGFloat = 20

@@ -11,15 +11,13 @@ class GFRepoItemVC: GFItemInfoVC {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         configureItems()
-       
     }
     
     private func configureItems() {
         itemInfoViewOne.set(itemInfoType: .repos, with: user.publicRepos)
         itemInfoViewTwo.set(itemInfoType: .gist, with: user.publicGists)
-        actionButton.set(backgroundColor: .systemPurple, title: "Github Profile")
+        actionButton.set(colour: .systemPurple, title: "Github Profile", systemImageName: "person.crop.circle.fill")
     }
     
     override func actionButtonTapped() {

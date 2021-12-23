@@ -11,7 +11,7 @@ class SearchVC: UIViewController {
     
     let logoImageView = UIImageView()
     let usernameTextField = GFTextField()
-    let callToActionButton = GFButton(backgroundColor: .systemGreen, title: "Get Followers")
+    let callToActionButton = GFButton(colour: .systemGreen, title: "Get Followers", systemImageName: "person.3")
     var logoImageViewTopConstraint: NSLayoutConstraint!
     
     var isUsernameEntered: Bool { !usernameTextField.text!.isEmpty }
@@ -59,14 +59,14 @@ class SearchVC: UIViewController {
     }
     
     func configureButton() {
-        callToActionButton.addTarget(self, action: #selector(handlePushFollwersListVC), for: .touchUpInside)
+        callToActionButton.addTarget(self, action: #selector(handlePushFollowersListVC), for: .touchUpInside)
         
         callToActionButton.constrainHeight(constant: 50)
         callToActionButton.anchor(top: nil, leading: view.leadingAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, trailing: view.trailingAnchor, padding: .init(top: 0, left: 50, bottom: 50, right: 50))
     }
     
     //MARK: target actions
-    @objc private func handlePushFollwersListVC() {
+    @objc private func handlePushFollowersListVC() {
         guard isUsernameEntered else {
             print("No Username Entered")
             presentCustomAlertVC(title: "Empty Username", message: "Please enter a username, we need to know who you are looking for 😎", buttonTitle: "choa Caho")
@@ -81,7 +81,7 @@ class SearchVC: UIViewController {
 extension SearchVC: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        handlePushFollwersListVC()
+        handlePushFollowersListVC()
         return true
     }
 }
