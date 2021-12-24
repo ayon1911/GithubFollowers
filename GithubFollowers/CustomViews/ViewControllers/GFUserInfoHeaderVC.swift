@@ -51,11 +51,7 @@ class UserInfoHeaderVC: UIViewController {
     }
     
     private func downloadAvatarImage() {
-        NetworkManager.shared.downloadImage(from: user.avatarUrl) { [weak self] image in
-            if let self = self {
-                DispatchQueue.main.async { self.avatarImageView.image = image }
-            }
-        }
+        Task { avatarImageView.image = await NetworkManager.shared.downloadImage(from: user.avatarUrl) ?? Images.avatarPlaceholder }
     }
     
     func setupView() {

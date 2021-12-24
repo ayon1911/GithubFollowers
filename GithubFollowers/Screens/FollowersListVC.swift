@@ -66,49 +66,51 @@ class FollowersListVC: GFDataLoadingVC, UISearchControllerDelegate {
     func getFollowers(username: String, page: Int) {
         showLoadingView()
         isLoadingMoreFollowers = true
-        NetworkManager.shared.getFollowers(for: username, page: page) { [weak self] result in
-            guard let self = self else { return }
-            self.dismissLoadingView()
-            
-            switch result {
-            case .success(let followers):
-                if followers.count < 100 { self.hasMoreFollowers = false }
-                self.followers.append(contentsOf: followers)
-                
-                if self.followers.isEmpty {
-                    let message = "This user doesn't have any followers, go and follow them 😃"
-                    DispatchQueue.main.async { self.showEmptyStateView(with: message, in: self.view) }
-                    return
+        
+        Task {
+            do {
+                let followers = try await NetworkManager.shared.getFollowers(for: username, page: page)
+                updateData(on: followers)
+                dismissLoadingView()
+            } catch {
+                presentGenericError()
+                if let gfError = error as? GFError {
+                    presentCustomAlertVC(title: "Bad stuff happened", message: gfError.rawValue, buttonTitle: "ok")
+                } else {
+                    presentGenericError()
                 }
-                self.updateData(on: followers)
-                
-            case .failure(let errorMessage):
-                self.presentCustomAlertVC(title: "Bad stuff hapened", message: errorMessage.rawValue, buttonTitle: "ok")
+                dismissLoadingView()
             }
-            self.isLoadingMoreFollowers = false
         }
     }
     
     @objc private func addButtonTapped() {
         showLoadingView()
-        NetworkManager.shared.getUserInfo(for: username) { [weak self] result in
-            guard let self = self else { return }
-            self.dismissLoadingView()
-            
-            switch result {
-            case .success(let user):
-                let favorite = Follower(login: user.login, avatarUrl: user.avatarUrl)
-                PersistenceManager.updateWith(favourite: favorite, actionType: .add) { [weak self] error in
-                    guard let self = self else { return }
-                    guard let error = error else {
-                        self.presentCustomAlertVC(title: "Success", message: "You have successfully added the user as you favorite 🤟🏽🤌🏾", buttonTitle: "Hooray 🎺")
-                        return
-                    }
-                    self.presentCustomAlertVC(title: "Someting went wrong", message: error.rawValue, buttonTitle: "OK")
+        Task {
+            do {
+                let user = try await NetworkManager.shared.getUserInfo(for: username)
+                addUserToFavourites(with: user)
+                dismissLoadingView()
+            } catch {
+                if let error = error as? GFError {
+                    presentCustomAlertVC(title: "Something went wrong", message: error.rawValue, buttonTitle: "OK")
+                } else {
+                    presentGenericError()
                 }
-            case .failure(let error):
-                self.presentCustomAlertVC(title: "Someting went wrong", message: error.rawValue, buttonTitle: "OK")
+                dismissLoadingView()
             }
+        }
+    }
+    
+    func addUserToFavourites(with user: User) {
+        let favorite = Follower(login: user.login, avatarUrl: user.avatarUrl)
+        PersistenceManager.updateWith(favourite: favorite, actionType: .add) { [weak self] error in
+            guard let self = self else { return }
+            guard let error = error else {
+                self.presentCustomAlertVC(title: "Success", message: "You have successfully added the user as you favorite 🤟🏽🤌🏾", buttonTitle: "Hooray 🎺")
+                return
+            }
+            self.presentCustomAlertVC(title: "Something went wrong", message: error.rawValue, buttonTitle: "OK")
         }
     }
     

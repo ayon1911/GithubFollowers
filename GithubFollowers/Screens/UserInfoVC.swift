@@ -68,15 +68,16 @@ class UserInfoVC: UIViewController {
     }
     
     fileprivate func getUserInfo() {
-        NetworkManager.shared.getUserInfo(for: user.login) { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let user):
-                print("ALl the user info \(user)")
-                DispatchQueue.main.async { self.configureUIElements(with: user) }
-            case .failure(let error):
-                self.presentCustomAlertVC(title: "Something went wrong", message: error.localizedDescription, buttonTitle: "OK")
+        Task {
+            do {
+                let user = try await NetworkManager.shared.getUserInfo(for: user.login)
+                configureUIElements(with: user)
+            } catch {
+                if let error = error as? GFError {
+                    presentCustomAlertVC(title: "Something went wrong", message: error.rawValue, buttonTitle: "OKi")
+                } else {
+                    presentGenericError()
+                }
             }
         }
     }
